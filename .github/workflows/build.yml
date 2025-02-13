@@ -48,5 +48,6 @@ jobs:
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: 'v1.0.0' # 指定 release 标签
         files: delcmdkey.exe # 指定要上传到 release 的文件
         draft: false # 发布为正式版本
