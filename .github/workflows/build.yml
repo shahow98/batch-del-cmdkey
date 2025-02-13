@@ -2,11 +2,8 @@ name: Build Go Project for Windows
 
 on:
   push:
-    branches:
-      - main # 触发条件：当推送到 main 分支时触发
-  pull_request:
-    branches:
-      - main # 触发条件：当向 main 分支发起 PR 时触发
+    tags:
+      - '*.*.*.*'
 
 jobs:
   build:
@@ -36,7 +33,7 @@ jobs:
   
   release:
     needs: build # 等待 build job 完成后执行
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Download artifact
@@ -45,9 +42,17 @@ jobs:
         name: delcmdkey-windows
         path: . # 将构建产物下载到当前目录
 
+    - name: Show files in directory
+      run: ls -R # 显示当前目录下的文件
+
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: 'v1.0.0' # 指定 release 标签
+        files: delcmdkey.exe # 指定要上传到 release 的文件
+        draft: false # 发布为正式版本
+
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v1
+      with:
         files: delcmdkey.exe # 指定要上传到 release 的文件
         draft: false # 发布为正式版本
